@@ -1,0 +1,13 @@
+p.caption {
+  margin-top: 1em;
+  text-align: justify;
+  font-weight: bold;
+  line-height: 1.2em;
+}
+blockquote {
+  opacity: 1 !important;
+  border-left: 1em solid darkslategrey !important;
+  padding: 0.5em 1em !important;
+  background-color: lightgrey !important;
+  line-height: 1.2 !important;
+}
