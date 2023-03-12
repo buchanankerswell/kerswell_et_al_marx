@@ -666,7 +666,7 @@ suppressWarnings(
 # Rearrange dataframe for correlations and transform units into
 # celcius, celcius per kilometer, percent, gigapascal
 if (!is.null(stats.summary)) {
-  d <-
+  d.corr <-
     stats.summary %>%
     select(
       upper.plate.thickness,
@@ -702,19 +702,88 @@ if (!is.null(stats.summary)) {
       'Grad mode2' = mode2.grad.est,
       'Rec rate' = rec.ratio.est
     )
-
+  d.modes <-
+    stats.summary %>%
+    select(
+      model,
+      upper.plate.thickness,
+      oceanic.plate.age,
+      convergence.velocity,
+      rec.ratio.est,
+      mode1.P.est,
+      mode2.P.est,
+      mode1.T.est,
+      mode2.T.est,
+      mode1.grad.est,
+      mode2.grad.est
+    ) %>%
+    mutate(
+      # Transform into typical units (celcius, celcius per kilometer, gigapascal, percent)
+      rec.ratio.est = rec.ratio.est*100,
+      mode1.P.est = mode1.P.est,
+      mode2.P.est = mode2.P.est,
+      mode1.T.est = mode1.T.est,
+      mode2.T.est = mode2.T.est,
+      mode1.grad.est = mode1.grad.est,
+      mode2.grad.est = mode2.grad.est
+    ) %>%
+    rename(
+      'OP age' = oceanic.plate.age,
+      'Velocity' = convergence.velocity,
+      'UP thickness' = upper.plate.thickness,
+      'P mode1' = mode1.P.est,
+      'P mode2' = mode2.P.est,
+      'T mode1' = mode1.T.est,
+      'T mode2' = mode2.T.est,
+      'Grad mode1' = mode1.grad.est,
+      'Grad mode2' = mode2.grad.est,
+      'Rec rate' = rec.ratio.est
+    ) %>%
+    pivot_longer(
+      -c(model, `UP thickness`, `OP age`, Velocity),
+      names_to = 'var',
+      values_to = 'varval'
+    ) %>%
+    pivot_longer(-c(var, varval, model), names_to = 'setting', values_to = 'settingval') %>%
+    mutate(
+      setting = factor(setting, levels = c('OP age', 'Velocity', 'UP thickness')),
+      var =
+        factor(var, levels =
+          c(
+            'P mode1',
+            'P mode2',
+            'T mode1',
+            'T mode2',
+            'Grad mode1',
+            'Grad mode2',
+            'Rec rate'
+          )
+        )
+    )
   # Calculate correlations with boundary conditions
   # use spearmans to test nonlinear correlations (specifically: monotonically-increasing)
   # https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient
-  corr <- d %>% as.matrix() %>% Hmisc::rcorr(type = 'spearman')
+  corr <- d.corr %>% as.matrix() %>% Hmisc::rcorr(type = 'spearman')
   corr$P[is.na(corr$P)] <- 1
-  
   # Flatten correlation matrix into dataframe
   corr.df <-
     flattenCorrMatrix(corr$r, corr$P) %>%
     filter(row %in% c('UP thickness', 'OP age', 'Velocity')) %>%
     filter(!(column %in% c('UP thickness', 'OP age', 'Velocity'))) %>%
     mutate(
+      row = factor(row, levels = c('UP thickness', 'Velocity', 'OP age')),
+      column =
+        factor(column, levels =
+          c(
+            'P mode1',
+            'P mode2',
+            'T mode1',
+            'T mode2',
+            'Grad mode1',
+            'Grad mode2',
+            'Rec rate'
+          )
+        ),
       lvl =
         map_chr(.$p, ~{
           if (.x <= 0.001) {'***'}
@@ -723,10 +792,9 @@ if (!is.null(stats.summary)) {
           else {'-'}
       })
     )
-  
   p7 <-
     ggplot() +
-    ggtitle('correlations') +
+    ggtitle('monotonic correlation test (always increasing or decreasing)') +
     geom_tile(
       data = mutate(corr.df, cor = ifelse(abs(p) < 0.05, cor, NA)),
       aes(column, row, fill = cor),
@@ -742,6 +810,8 @@ if (!is.null(stats.summary)) {
     scale_fill_continuous_diverging(
       'blue-red3',
       rev = T,
+      limits = c(-0.7, 0.7),
+      breaks = seq(-0.7, 0.7, 0.35),
       na.value = 'grey50',
       name = bquote("Spearman's correlation coefficient"~rho),
       guide =
@@ -752,7 +822,7 @@ if (!is.null(stats.summary)) {
           barwidth = unit(3.5, 'in')
         )
     ) +
-    labs(x = 'Marker distributions', y = 'Boundary conditions') +
+    labs(x = NULL, y = NULL) +
     theme_bw(base_size = 16) +
     theme(
       plot.margin = margin(2, 2, 2, 2),
@@ -762,17 +832,44 @@ if (!is.null(stats.summary)) {
       legend.justification = 'top',
       legend.box.just = 'top',
       legend.position = 'bottom',
-      axis.text.y = element_text(angle = 90, hjust = 0.5),
+      axis.text.y = element_text(angle = 90, hjust = 0.5, vjust = -8),
       axis.ticks = element_blank()
     )
+  p7.b <-
+    ggplot() +
+    ggtitle('distributions of PT modes and recovery rates') +
+    geom_boxplot(
+      data = d.modes,
+      aes(varval, settingval, group = settingval),
+      width = 10,
+      outlier.size = 0.5
+    ) +
+    facet_grid(vars(setting), vars(var), scales = 'free', switch = 'y') +
+    scale_y_continuous(position = 'right') +
+    labs(x = NULL, y = NULL) +
+    theme_bw(base_size = 16) +
+    theme(
+      plot.margin = margin(2, 2, 2, 2),
+      panel.background = element_rect(color = 'black', fill = 'grey50'),
+      panel.grid = element_blank(),
+      legend.box.margin = margin(),
+      legend.margin = margin(),
+      legend.justification = 'top',
+      legend.box.just = 'top',
+      legend.position = 'bottom',
+      axis.text.x = element_text(angle = -90, hjust = 0.5),
+      axis.ticks = element_blank()
+    )
+  pp.corr <-
+    p7.b / p7
   # Save
   suppressWarnings(
     ggsave(
       'figs/summary/thermo-kinematic-correlations-summary.png',
-      plot = p7,
+      plot = pp.corr,
       device = 'png',
       width = 9,
-      height = 5
+      height = 10
     )
   )
 }
