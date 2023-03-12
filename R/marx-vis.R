@@ -244,7 +244,7 @@ fun <- function(model, path_marx, path_grid) {
       na.value = 'transparent',
       rev = F,
       name =
-        paste0('marker density n=', nrow(filter(marx.class.filtered.pt.path, recovered))),
+        paste0('marker count n=', nrow(filter(marx.class.filtered.pt.path, recovered))),
       guide =
         guide_colorstrip(
           inside = T,

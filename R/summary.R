@@ -217,7 +217,7 @@ p1 <-
     rev = F,
     name =
       paste0(
-        'marker density n=',
+        'marker count n=',
         nrow(filter(marx.class.summary.filtered.pt.path, recovered))
       ),
     guide =
@@ -847,7 +847,7 @@ plots.dens <-
       limits = break.lims.marx,
       na.value = 'transparent',
       rev = F,
-      name = paste0('marker density n=', nrow(filter(m, recovered))),
+      name = paste0('marker count n=', nrow(filter(m, recovered))),
       guide =
         guide_colorstrip(
           inside = T,
