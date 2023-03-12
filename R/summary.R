@@ -119,7 +119,7 @@ cdfP.summary <-
 break.points.marx <- MakeBreaks(bins = 6)
 break.points.ag18 <- MakeBreaks(bins = 5)
 break.points.pd15 <- MakeBreaks(binwidth = 5)
-break.lims.marx <- c(round(max(dens.summary$cnt)/10, -1), NA)
+break.lims.marx <- c(round(max(dens.summary$cnt)/8, -1), NA)
 break.lims.ag18 <- c(round(max(ag18.dens$cnt)/6), NA)
 break.lims.pd15 <- c(round(max(pd15.dens$cnt)/12), NA)
 if(break.lims.marx[1] < 1) {break.lims.marx[1] <- 1}
@@ -139,11 +139,16 @@ cat('\nDrawing plots ...')
 # Compute density modes
 n <- 10
 thresh <- 65
-d.marx <- density(
+d.marx.P <- density(
   marx.class.summary.filtered.pt.path$P[marx.class.summary.filtered.pt.path$recovered]
 )
-d.pd15 <- density(pd15$P)
-d.ag18 <- density(ag18$P)
+d.pd15.P <- density(pd15$P)
+d.ag18.P <- density(ag18$P)
+d.marx.T <- density(
+  marx.class.summary.filtered.pt.path$T[marx.class.summary.filtered.pt.path$recovered]
+)
+d.pd15.T <- density(pd15$T)
+d.ag18.T <- density(ag18$T)
 
 p1 <-
   ggplot() +
@@ -298,7 +303,7 @@ p2 <-
     data = drop_na(cdfP.summary),
     aes(P, prob, color = 'markers')
   ) +
-  labs(y = 'CDF', x = 'pressure (GPa)') +
+  labs(y = 'CDF', x = 'P (GPa)') +
   guides(color = 'none') +
   coord_cartesian(ylim = c(0, 1), xlim = c(0, 4)) +
   scale_color_manual(
@@ -325,21 +330,21 @@ p2 <-
 p3 <-
   ggplot() +
   geom_path(
-    data = data.frame(d.pd15[c('x', 'y')]),
+    data = data.frame(d.pd15.P[c('x', 'y')]),
     aes(x, y),
     color = sequential_hcl(8, palette = pd15.col)[8]
   ) +
   geom_path(
-    data = data.frame(d.ag18[c('x', 'y')]),
+    data = data.frame(d.ag18.P[c('x', 'y')]),
     aes(x, y),
     color = sequential_hcl(8, palette = ag18.col)[1]
   ) +
   geom_path(
-    data = data.frame(d.marx[c('x', 'y')]),
+    data = data.frame(d.marx.P[c('x', 'y')]),
     aes(x, y),
     color = sequential_hcl(8, palette = marx.col)[8]
   ) +
-  labs(x = 'pressure (GPa)', y = 'PDF') +
+  labs(x = 'P (GPa)', y = NULL) +
   coord_cartesian(xlim = c(0, 4)) +
   scale_x_continuous(breaks = seq(0, 4, 1)) +
   scale_y_continuous(position = 'right') +
@@ -354,11 +359,46 @@ p3 <-
     panel.background = element_rect(color = 'grey90', fill = NA),
     plot.background = element_blank()
   )
+p3.b <-
+  ggplot() +
+  geom_path(
+    data = data.frame(d.pd15.T[c('x', 'y')]),
+    aes(x, y),
+    color = sequential_hcl(8, palette = pd15.col)[8]
+  ) +
+  geom_path(
+    data = data.frame(d.ag18.T[c('x', 'y')]),
+    aes(x, y),
+    color = sequential_hcl(8, palette = ag18.col)[1]
+  ) +
+  geom_path(
+    data = data.frame(d.marx.T[c('x', 'y')]),
+    aes(x, y),
+    color = sequential_hcl(8, palette = marx.col)[8]
+  ) +
+  labs(x = 'T (˚C)', y = 'PDF') +
+  coord_cartesian(xlim = c(0, 1000)) +
+  scale_x_continuous(breaks = seq(0, 1000, 250)) +
+  scale_y_continuous(position = 'right') +
+  theme_dark(base_size = 10) +
+  theme(
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    axis.text.x = element_text(color = 'white'),
+    axis.ticks.x = element_line(color = 'white'),
+    axis.title.x = element_text(color = 'white'),
+    axis.title.y = element_text(color = 'white'),
+    legend.title = element_text(margin = margin(0, 0, -5, 0)),
+    panel.grid = element_blank(),
+    panel.background = element_rect(color = 'grey90', fill = NA),
+    plot.background = element_blank()
+  )
 pp1 <-
   p1 +
-  ggtitle(paste0('global markers: ', pt.path.filter)) +
+  ggtitle('global markers') +
   inset_element(p2, 0.11, 0.495, 0.39, 0.755, align_to = 'full') +
-  inset_element(p3, 0.11, 0.745, 0.39, 0.945, align_to = 'full') +
+  inset_element(p3, 0.11, 0.745, 0.353, 0.945, align_to = 'full') +
+  inset_element(p3.b, 0.343, 0.685, 0.63, 0.945, align_to = 'full') +
   plot_layout(guides = 'collect') &
   theme(
     plot.margin = margin(2, 2, 2, 2),
@@ -540,16 +580,16 @@ p5 <-
 p6 <-
   ggplot() +
   geom_path(
-    data = data.frame(d.pd15[c('x', 'y')]),
+    data = data.frame(d.pd15.P[c('x', 'y')]),
     aes(x, y),
     color = sequential_hcl(8, palette = pd15.col)[8]
   ) +
   geom_path(
-    data = data.frame(d.ag18[c('x', 'y')]),
+    data = data.frame(d.ag18.P[c('x', 'y')]),
     aes(x, y),
     color = sequential_hcl(8, palette = ag18.col)[1]
   ) +
-  labs(x = 'pressure (GPa)', y = 'PDF') +
+  labs(x = 'pressure (GPa)', y = NULL) +
   coord_cartesian(xlim = c(0, 4)) +
   scale_x_continuous(breaks = seq(0, 4, 1)) +
   scale_y_continuous(position = 'right') +
@@ -564,11 +604,41 @@ p6 <-
     panel.background = element_rect(color = 'grey90', fill = NA),
     plot.background = element_blank()
   )
+p6.b <-
+  ggplot() +
+  geom_path(
+    data = data.frame(d.pd15.T[c('x', 'y')]),
+    aes(x, y),
+    color = sequential_hcl(8, palette = pd15.col)[8]
+  ) +
+  geom_path(
+    data = data.frame(d.ag18.T[c('x', 'y')]),
+    aes(x, y),
+    color = sequential_hcl(8, palette = ag18.col)[1]
+  ) +
+  labs(x = 'T (˚C)', y = 'PDF') +
+  coord_cartesian(xlim = c(0, 1000)) +
+  scale_x_continuous(breaks = seq(0, 1000, 250)) +
+  scale_y_continuous(position = 'right') +
+  theme_dark(base_size = 10) +
+  theme(
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    axis.text.x = element_text(color = 'white'),
+    axis.ticks.x = element_line(color = 'white'),
+    axis.title.x = element_text(color = 'white'),
+    axis.title.y = element_text(color = 'white'),
+    legend.title = element_text(margin = margin(0, 0, -5, 0)),
+    panel.grid = element_blank(),
+    panel.background = element_rect(color = 'grey90', fill = NA),
+    plot.background = element_blank()
+  )
 pp2 <-
   p4 +
   ggtitle('rock record') +
   inset_element(p5, 0.11, 0.495, 0.39, 0.755, align_to = 'full') +
-  inset_element(p6, 0.11, 0.745, 0.39, 0.945, align_to = 'full') +
+  inset_element(p6, 0.11, 0.745, 0.353, 0.945, align_to = 'full') +
+  inset_element(p6.b, 0.343, 0.685, 0.63, 0.945, align_to = 'full') +
   plot_layout(guides = 'collect') &
   theme(
     plot.margin = margin(2, 2, 2, 2),
@@ -656,7 +726,7 @@ if (!is.null(stats.summary)) {
   
   p7 <-
     ggplot() +
-    ggtitle(paste0('correlations: ', pt.path.filter)) +
+    ggtitle('correlations') +
     geom_tile(
       data = mutate(corr.df, cor = ifelse(abs(p) < 0.05, cor, NA)),
       aes(column, row, fill = cor),
@@ -669,32 +739,32 @@ if (!is.null(stats.summary)) {
       size = 5
     ) +
     coord_cartesian(expand = F) +
-  scale_fill_continuous_diverging(
-    'blue-red3',
-    rev = T,
-    na.value = 'grey50',
-    name = bquote("Spearman's correlation coefficient"~rho),
-    guide =
-      guide_colorstrip(
-        inside = T,
-        title.position = 'top',
-        title.vjust = 1,
-        barwidth = unit(3.5, 'in')
-      )
-  ) +
-  labs(x = 'Marker distributions', y = 'Boundary conditions') +
-  theme_bw(base_size = 16) +
-  theme(
-    plot.margin = margin(2, 2, 2, 2),
-    panel.background = element_rect(color = 'black'),
-    legend.box.margin = margin(),
-    legend.margin = margin(),
-    legend.justification = 'top',
-    legend.box.just = 'top',
-    legend.position = 'bottom',
-    axis.text.y = element_text(angle = 90, hjust = 0.5),
-    axis.ticks = element_blank()
-  )
+    scale_fill_continuous_diverging(
+      'blue-red3',
+      rev = T,
+      na.value = 'grey50',
+      name = bquote("Spearman's correlation coefficient"~rho),
+      guide =
+        guide_colorstrip(
+          inside = T,
+          title.position = 'top',
+          title.vjust = 1,
+          barwidth = unit(3.5, 'in')
+        )
+    ) +
+    labs(x = 'Marker distributions', y = 'Boundary conditions') +
+    theme_bw(base_size = 16) +
+    theme(
+      plot.margin = margin(2, 2, 2, 2),
+      panel.background = element_rect(color = 'black'),
+      legend.box.margin = margin(),
+      legend.margin = margin(),
+      legend.justification = 'top',
+      legend.box.just = 'top',
+      legend.position = 'bottom',
+      axis.text.y = element_text(angle = 90, hjust = 0.5),
+      axis.ticks = element_blank()
+    )
   # Save
   suppressWarnings(
     ggsave(
@@ -766,9 +836,12 @@ plots.dens <-
           m %>%
           filter(oceanic.plate.age %in% c(85.0, 110.0), upper.plate.thickness %in% c(46, 62))
       }
-    d.pd15 <- density(pd15$P)
-    d.ag18 <- density(ag18$P)
-    d.marx <- density(m$P[m$recovered])
+    d.pd15.P <- density(pd15$P)
+    d.ag18.P <- density(ag18$P)
+    d.marx.P <- density(m$P[m$recovered])
+    d.pd15.T <- density(pd15$T)
+    d.ag18.T <- density(ag18$T)
+    d.marx.T <- density(m$T[m$recovered])
     dens.summary <- compute_dens_2d(filter(m, recovered), n = 80)
     cdfP.summary <-
       m %>%
@@ -953,21 +1026,21 @@ plots.dens <-
     p3 <-
       ggplot() +
       geom_path(
-        data = data.frame(d.pd15[c('x', 'y')]),
+        data = data.frame(d.pd15.P[c('x', 'y')]),
         aes(x, y),
         color = sequential_hcl(8, palette = pd15.col)[8]
       ) +
       geom_path(
-        data = data.frame(d.ag18[c('x', 'y')]),
+        data = data.frame(d.ag18.P[c('x', 'y')]),
         aes(x, y),
         color = sequential_hcl(8, palette = ag18.col)[1]
       ) +
       geom_path(
-        data = data.frame(d.marx[c('x', 'y')]),
+        data = data.frame(d.marx.P[c('x', 'y')]),
         aes(x, y),
         color = sequential_hcl(8, palette = marx.col)[8]
       ) +
-      labs(x = 'pressure (GPa)', y = 'PDF') +
+      labs(x = 'pressure (GPa)', y = NULL) +
       coord_cartesian(xlim = c(0, 4)) +
       scale_x_continuous(breaks = seq(0, 4, 1)) +
       scale_y_continuous(position = 'right') +
@@ -982,11 +1055,46 @@ plots.dens <-
         panel.background = element_rect(color = 'grey90', fill = NA),
         plot.background = element_blank()
       )
+    p3.b <-
+      ggplot() +
+      geom_path(
+        data = data.frame(d.pd15.T[c('x', 'y')]),
+        aes(x, y),
+        color = sequential_hcl(8, palette = pd15.col)[8]
+      ) +
+      geom_path(
+        data = data.frame(d.ag18.T[c('x', 'y')]),
+        aes(x, y),
+        color = sequential_hcl(8, palette = ag18.col)[1]
+      ) +
+      geom_path(
+        data = data.frame(d.marx.T[c('x', 'y')]),
+        aes(x, y),
+        color = sequential_hcl(8, palette = marx.col)[8]
+      ) +
+      labs(x = 'T (˚C)', y = 'PDF') +
+      coord_cartesian(xlim = c(0, 1000)) +
+      scale_x_continuous(breaks = seq(0, 1000, 250)) +
+      scale_y_continuous(position = 'right') +
+      theme_dark(base_size = 10) +
+      theme(
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.x = element_text(color = 'white'),
+        axis.ticks.x = element_line(color = 'white'),
+        axis.title.x = element_text(color = 'white'),
+        axis.title.y = element_text(color = 'white'),
+        legend.title = element_text(margin = margin(0, 0, -5, 0)),
+        panel.grid = element_blank(),
+        panel.background = element_rect(color = 'grey90', fill = NA),
+    plot.background = element_blank()
+  )
     pp1 <-
       p1 +
       ggtitle(paste0(str_replace(.x, '-', ' '), ' systems')) +
       inset_element(p2, 0.11, 0.495, 0.39, 0.755, align_to = 'full') +
-      inset_element(p3, 0.11, 0.745, 0.39, 0.945, align_to = 'full') +
+      inset_element(p3, 0.11, 0.745, 0.353, 0.945, align_to = 'full') +
+      inset_element(p3.b, 0.343, 0.685, 0.63, 0.945, align_to = 'full') +
       plot_layout(guides = 'collect') &
       theme(
         plot.margin = margin(2, 2, 2, 2),
@@ -1014,7 +1122,8 @@ plots.dens <-
       p1 +
       ggtitle(paste0(str_replace(.x, '-', ' '), ' systems')) +
       inset_element(p2, 0.11, 0.495, 0.39, 0.755, align_to = 'full') +
-      inset_element(p3, 0.11, 0.745, 0.39, 0.945, align_to = 'full') +
+      inset_element(p3, 0.11, 0.745, 0.353, 0.945, align_to = 'full') +
+      inset_element(p3.b, 0.343, 0.685, 0.63, 0.945, align_to = 'full') +
       plot_layout(guides = 'collect') &
       theme(
         plot.margin = margin(2, 2, 2, 2),

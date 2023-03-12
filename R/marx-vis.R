@@ -14,7 +14,7 @@ args <- commandArgs(trailingOnly=TRUE)
 if (length(args) == 0) {
   cat('\nNo arguments passed to R/marx-vis.R')
   cores <- availableCores()-2
-  gradient.threshold <- 5
+  gradient.threshold <- 3
   pt.path.filter <- 'maxP'
   cat('\nUsing defaults')
   cat('\nCores for parallel computing     :', cores)
@@ -156,24 +156,12 @@ fun <- function(model, path_marx, path_grid) {
   # Max PT conditions plot
   n <- 10
   thresh <- 65
-  d.marx <- density(marx.class.filtered.pt.path$P[marx.class.filtered.pt.path$recovered])
-  modes.marx <-
-    as_tibble(data.frame(d.marx[c('x', 'y')])[c(F, diff(diff(d.marx$y)>=0)<0),]) %>%
-    arrange(desc(y)) %>%
-    mutate(mode = 1:n(), .before = x)
-  modes.marx <- filter(modes.marx, y > max(modes.marx$y)/thresh) %>% slice(1:n)
-  d.pd15 <- density(pd15$P)
-  modes.pd15 <-
-    as_tibble(data.frame(d.pd15[c('x', 'y')])[c(F, diff(diff(d.pd15$y)>=0)<0),]) %>%
-    arrange(desc(y)) %>%
-    mutate(mode = 1:n(), .before = x)
-  modes.pd15 <- filter(modes.pd15, y > max(modes.pd15$y)/65) %>% slice(1:10)
-  d.ag18 <- density(ag18$P)
-  modes.ag18 <-
-    as_tibble(data.frame(d.ag18[c('x', 'y')])[c(F, diff(diff(d.ag18$y)>=0)<0),]) %>%
-  arrange(desc(y)) %>%
-  mutate(mode = 1:n(), .before = x)
-  modes.ag18 <- filter(modes.ag18, y > max(modes.ag18$y)/65) %>% slice(1:10)
+  d.marx.P <- density(marx.class.filtered.pt.path$P[marx.class.filtered.pt.path$recovered])
+  d.pd15.P <- density(pd15$P)
+  d.ag18.P <- density(ag18$P)
+  d.marx.T <- density(marx.class.filtered.pt.path$T[marx.class.filtered.pt.path$recovered])
+  d.pd15.T <- density(pd15$T)
+  d.ag18.T <- density(ag18$T)
   p1 <-
     ggplot() +
     geom_contour_fill(
@@ -335,7 +323,7 @@ fun <- function(model, path_marx, path_grid) {
       data = drop_na(cdfP.marx),
       aes(P, prob, color = 'markers')
     ) +
-    labs(y = 'CDF', x = 'pressure (GPa)') +
+    labs(y = 'CDF', x = 'P (GPa)') +
     guides(color = 'none') +
     coord_cartesian(ylim = c(0, 1), xlim = c(0, 4)) +
     scale_color_manual(
@@ -362,84 +350,21 @@ fun <- function(model, path_marx, path_grid) {
   p3 <-
     ggplot() +
     geom_path(
-      data = data.frame(d.pd15[c('x', 'y')]),
+      data = data.frame(d.pd15.P[c('x', 'y')]),
       aes(x, y),
       color = sequential_hcl(8, palette = pd15.col)[8]
     ) +
     geom_path(
-      data = data.frame(d.ag18[c('x', 'y')]),
+      data = data.frame(d.ag18.P[c('x', 'y')]),
       aes(x, y),
-      color = sequential_hcl(8, palette = ag18.col)[1]
-    ) +
-    geom_point(
-      data = modes.pd15,
-      aes(x, y),
-      size = 1,
-      shape = 18,
-      color = sequential_hcl(8, palette = pd15.col)[8]
-    ) +
-    geom_point(
-      data = modes.ag18,
-      aes(x, y),
-      size = 1,
-      shape = 18,
-      color = sequential_hcl(8, palette = ag18.col)[1]
-    ) +
-    geom_point(
-      data = slice_max(modes.pd15, y),
-      aes(x, y),
-      size = 1,
-      shape = 18,
-      color = sequential_hcl(8, palette = pd15.col)[8]
-    ) +
-    geom_point(
-      data = slice_max(modes.pd15, x),
-      aes(x, y),
-      size = 1,
-      shape = 18,
-      color = sequential_hcl(8, palette = pd15.col)[8]
-    ) +
-    geom_point(
-      data = slice_max(modes.ag18, y),
-      aes(x, y),
-      size = 1,
-      shape = 18,
-      color = sequential_hcl(8, palette = ag18.col)[1]
-    ) +
-    geom_point(
-      data = slice_max(modes.ag18, x),
-      aes(x, y),
-      size = 1,
-      shape = 18,
       color = sequential_hcl(8, palette = ag18.col)[1]
     ) +
     geom_path(
-      data = data.frame(d.marx[c('x', 'y')]),
+      data = data.frame(d.marx.P[c('x', 'y')]),
       aes(x, y),
       color = sequential_hcl(8, palette = marx.col)[8]
     ) +
-    geom_point(
-      data = modes.marx,
-      aes(x, y),
-      size = 1,
-      shape = 18,
-      color = sequential_hcl(8, palette = marx.col)[8]
-    ) +
-    geom_point(
-      data = slice_max(modes.marx, y),
-      aes(x, y),
-      size = 1,
-      shape = 18,
-      color = sequential_hcl(8, palette = marx.col)[8]
-    ) +
-    geom_point(
-      data = slice_max(modes.marx, x),
-      aes(x, y),
-      size = 1,
-      shape = 18,
-      color = sequential_hcl(8, palette = marx.col)[8]
-    ) +
-    labs(x = 'pressure (GPa)', y = 'PDF') +
+    labs(x = 'P (GPa)', y = NULL) +
     coord_cartesian(xlim = c(0, 4)) +
     scale_x_continuous(breaks = seq(0, 4, 1)) +
     scale_y_continuous(position = 'right') +
@@ -454,10 +379,45 @@ fun <- function(model, path_marx, path_grid) {
       panel.background = element_rect(color = 'grey90', fill = NA),
       plot.background = element_blank()
     )
+  p3.b <-
+    ggplot() +
+    geom_path(
+      data = data.frame(d.pd15.T[c('x', 'y')]),
+      aes(x, y),
+      color = sequential_hcl(8, palette = pd15.col)[8]
+    ) +
+    geom_path(
+      data = data.frame(d.ag18.T[c('x', 'y')]),
+      aes(x, y),
+      color = sequential_hcl(8, palette = ag18.col)[1]
+    ) +
+    geom_path(
+      data = data.frame(d.marx.T[c('x', 'y')]),
+      aes(x, y),
+      color = sequential_hcl(8, palette = marx.col)[8]
+    ) +
+    labs(x = 'T (˚C)', y = 'PDF') +
+    coord_cartesian(xlim = c(0, 1000)) +
+    scale_x_continuous(breaks = seq(0, 1000, 250)) +
+    scale_y_continuous(position = 'right') +
+    theme_dark(base_size = 10) +
+    theme(
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank(),
+      axis.text.x = element_text(color = 'white'),
+      axis.ticks.x = element_line(color = 'white'),
+      axis.title.x = element_text(color = 'white'),
+      axis.title.y = element_text(color = 'white'),
+      legend.title = element_text(margin = margin(0, 0, -5, 0)),
+      panel.grid = element_blank(),
+      panel.background = element_rect(color = 'grey90', fill = NA),
+      plot.background = element_blank()
+    )
   pp1 <-
     p1 +
-    inset_element(p2, 0.11, 0.545, 0.394, 0.805, align_to = 'full') +
-    inset_element(p3, 0.11, 0.795, 0.394, 0.995, align_to = 'full') +
+    inset_element(p2, 0.11, 0.55, 0.394, 0.805, align_to = 'full') +
+    inset_element(p3, 0.11, 0.795, 0.363, 0.995, align_to = 'full') +
+    inset_element(p3.b, 0.354, 0.734, 0.63, 0.995, align_to = 'full') +
     plot_layout(guides = 'collect') &
     theme(
       plot.margin = margin(2, 2, 2, 2),
@@ -678,7 +638,7 @@ fun <- function(model, path_marx, path_grid) {
     ) +
     new_scale_color() +
     geom_point(
-      data = filter(marx.class.sample, recovered == 'yes'),
+      data = filter(marx.class.sample, recovered == 'yes' & pt.path.position != 'maxPT'),
       aes(T, P, color = pt.path.position),
       size = 0.8
     ) +
@@ -762,13 +722,12 @@ fun <- function(model, path_marx, path_grid) {
     )
   p9 <-
     ggplot() +
-    geom_histogram(
+    geom_density(
       data = filter(marx.class.sample, recovered == 'yes' & pt.path.position != 'maxPT'),
-      aes(P, fill = pt.path.position, group = pt.path.position),
-      color = NA,
+      aes(P, color = pt.path.position, group = pt.path.position),
+      fill = NA,
       position = 'identity',
-      alpha = 0.6,
-      bins = 30
+      alpha = 0.6
     ) +
     scale_x_continuous(
       position = 'top',
@@ -776,8 +735,8 @@ fun <- function(model, path_marx, path_grid) {
       limits = c(0, 3),
       breaks = seq(0, 3, 1)
     ) +
-    labs(x = 'pressure (GPa)', y = 'frequency') +
-    scale_fill_manual(
+    labs(x = 'P (GPa)', y = 'PDF') +
+    scale_color_manual(
       name = 'PT path position',
       values = c('maxT' = 'white', 'maxP' = 'black'),
       guide = 'none'
@@ -796,13 +755,12 @@ fun <- function(model, path_marx, path_grid) {
     )
   p10 <-
     ggplot() +
-    geom_histogram(
+    geom_density(
       data = filter(marx.class.sample, recovered == 'yes' & pt.path.position != 'maxPT'),
-      aes(T, fill = pt.path.position, group = pt.path.position),
-      color = NA,
+      aes(T, color = pt.path.position, group = pt.path.position),
+      fill = NA,
       position = 'identity',
-      alpha = 0.6,
-      bins = 30
+      alpha = 0.6
     ) +
     scale_x_continuous(
       position = 'top',
@@ -810,8 +768,8 @@ fun <- function(model, path_marx, path_grid) {
       limits = c(0, 800),
       breaks = seq(0, 800, 200)
     ) +
-    labs(x = 'temp (˚C)', y = 'frequency') +
-    scale_fill_manual(
+    labs(x = 'T (˚C)', y = 'PDF') +
+    scale_color_manual(
       name = 'PT path position',
       values = c('maxT' = 'white', 'maxP' = 'black'),
       guide = 'none'
@@ -832,8 +790,8 @@ fun <- function(model, path_marx, path_grid) {
   pp4 <-
     p8 +
     ggtitle('classification') +
-    inset_element(p9, 0.11, 0.505, 0.4015, 0.755, align_to = 'full') +
-    inset_element(p10, 0.11, 0.745, 0.426, 0.945, align_to = 'full') +
+    inset_element(p9, 0.11, 0.525, 0.404, 0.755, align_to = 'full') +
+    inset_element(p10, 0.11, 0.745, 0.428, 0.945, align_to = 'full') +
     plot_layout(guides = 'collect') &
     theme(
       plot.margin = margin(2, 2, 2, 2),
@@ -970,7 +928,7 @@ fun <- function(model, path_marx, path_grid) {
       limits = c(0, 15),
       breaks = seq(0, 15, 5)
     ) +
-    labs(x = 'cluster', y = 'maxGrad (˚C/km)') +
+    labs(x = 'cluster', y = 'Grad (˚C/km)') +
     guides(color = 'none', fill = 'none') +
     scale_color_continuous_sequential(
       cls.col,
@@ -1032,7 +990,7 @@ fun <- function(model, path_marx, path_grid) {
       outlier.shape = NA,
       size = 0.5
     ) +
-    labs(x = 'cluster', y = 'maxZ (km)') +
+    labs(x = 'cluster', y = 'Z (km)') +
     guides(color = 'none', fill = 'none') +
     scale_color_continuous_sequential(
       cls.col,
@@ -1085,7 +1043,7 @@ fun <- function(model, path_marx, path_grid) {
   pp5 <-
     p11 +
     ggtitle('GMM clustering') +
-    inset_element(p12, 0.11, 0.505, 0.415, 0.755, align_to = 'full') +
+    inset_element(p12, 0.11, 0.525, 0.415, 0.755, align_to = 'full') +
     inset_element(p13, 0.11, 0.745, 0.428, 0.945, align_to = 'full') +
     plot_layout(guides = 'collect') &
     theme(
