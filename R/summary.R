@@ -142,23 +142,8 @@ thresh <- 65
 d.marx <- density(
   marx.class.summary.filtered.pt.path$P[marx.class.summary.filtered.pt.path$recovered]
 )
-modes.marx <-
-  as_tibble(data.frame(d.marx[c('x', 'y')])[c(F, diff(diff(d.marx$y)>=0)<0),]) %>%
-  arrange(desc(y)) %>%
-  mutate(mode = 1:n(), .before = x)
-modes.marx <- filter(modes.marx, y > max(modes.marx$y)/thresh) %>% slice(1:n)
 d.pd15 <- density(pd15$P)
-modes.pd15 <-
-  as_tibble(data.frame(d.pd15[c('x', 'y')])[c(F, diff(diff(d.pd15$y)>=0)<0),]) %>%
-  arrange(desc(y)) %>%
-  mutate(mode = 1:n(), .before = x)
-modes.pd15 <- filter(modes.pd15, y > max(modes.pd15$y)/65) %>% slice(1:10)
 d.ag18 <- density(ag18$P)
-modes.ag18 <-
-  as_tibble(data.frame(d.ag18[c('x', 'y')])[c(F, diff(diff(d.ag18$y)>=0)<0),]) %>%
-  arrange(desc(y)) %>%
-  mutate(mode = 1:n(), .before = x)
-modes.ag18 <- filter(modes.ag18, y > max(modes.ag18$y)/65) %>% slice(1:10)
 
 p1 <-
   ggplot() +
@@ -349,95 +334,10 @@ p3 <-
     aes(x, y),
     color = sequential_hcl(8, palette = ag18.col)[1]
   ) +
-  geom_point(
-    data = modes.pd15,
-    aes(x, y),
-    size = 1,
-    shape = 18,
-    color = sequential_hcl(8, palette = pd15.col)[8]
-  ) +
-  geom_point(
-    data = modes.ag18,
-    aes(x, y),
-    size = 1,
-    shape = 18,
-    color = sequential_hcl(8, palette = ag18.col)[1]
-  ) +
-  geom_point(
-    data = slice_max(modes.pd15, y),
-    aes(x, y),
-    size = 1,
-    shape = 18,
-    color = sequential_hcl(8, palette = pd15.col)[8]
-  ) +
-  geom_point(
-    data = slice_max(modes.pd15, x),
-    aes(x, y),
-    size = 1,
-    shape = 18,
-    color = sequential_hcl(8, palette = pd15.col)[8]
-  ) +
-  geom_point(
-    data = slice_max(modes.ag18, y),
-    aes(x, y),
-    size = 1,
-    shape = 18,
-    color = sequential_hcl(8, palette = ag18.col)[1]
-  ) +
-  geom_point(
-    data = slice_max(modes.ag18, x),
-    aes(x, y),
-    size = 1,
-    shape = 18,
-    color = sequential_hcl(8, palette = ag18.col)[1]
-  ) +
   geom_path(
     data = data.frame(d.marx[c('x', 'y')]),
     aes(x, y),
     color = sequential_hcl(8, palette = marx.col)[8]
-  ) +
-  geom_point(
-    data = modes.marx,
-    aes(x, y),
-    size = 1,
-    shape = 18,
-    color = sequential_hcl(8, palette = marx.col)[8]
-  ) +
-  geom_point(
-    data = slice_max(modes.marx, y),
-    aes(x, y),
-    size = 1,
-    shape = 18,
-    color = sequential_hcl(8, palette = marx.col)[8]
-  ) +
-  geom_point(
-    data = slice_max(modes.marx, x),
-    aes(x, y),
-    size = 1,
-    shape = 18,
-    color = sequential_hcl(8, palette = marx.col)[8]
-  ) +
-  geom_label_repel(
-    data = slice_max(modes.marx, y),
-    aes(x, y, label = 'm1'),
-    size = 3,
-    color = 'black',
-    fill = 'grey90',
-    alpha = 0.8,
-    label.padding = unit(0.02, 'in'),
-    label.r = unit(0, 'in'),
-    min.segment.length = 0
-  ) +
-  geom_label_repel(
-    data = slice_max(modes.marx, x),
-    aes(x, y, label = 'm2'),
-    size = 3,
-    color = 'black',
-    fill = 'grey90',
-    alpha = 0.8,
-    label.padding = unit(0.02, 'in'),
-    label.r = unit(0, 'in'),
-    min.segment.length = 0
   ) +
   labs(x = 'pressure (GPa)', y = 'PDF') +
   coord_cartesian(xlim = c(0, 4)) +
@@ -538,6 +438,7 @@ p4 <-
   scale_shape_manual(
     name = 'samples',
     values = c('ag18' = 0, 'pd15' = 16),
+    breaks = c('pd15', 'ag18'),
     guide =
       guide_legend(
         override.aes = list(size = 5),
@@ -647,81 +548,6 @@ p6 <-
     data = data.frame(d.ag18[c('x', 'y')]),
     aes(x, y),
     color = sequential_hcl(8, palette = ag18.col)[1]
-  ) +
-  geom_point(
-    data = modes.pd15,
-    aes(x, y),
-    size = 1,
-    shape = 18,
-    color = sequential_hcl(8, palette = pd15.col)[8]
-  ) +
-  geom_point(
-    data = modes.ag18,
-    aes(x, y),
-    size = 1,
-    shape = 18,
-    color = sequential_hcl(8, palette = ag18.col)[1]
-  ) +
-  geom_point(
-    data = slice_max(modes.pd15, y),
-    aes(x, y),
-    size = 1,
-    shape = 18,
-    color = sequential_hcl(8, palette = pd15.col)[8]
-  ) +
-  geom_point(
-    data = slice_max(modes.pd15, x),
-    aes(x, y),
-    size = 1,
-    shape = 18,
-    color = sequential_hcl(8, palette = pd15.col)[8]
-  ) +
-  geom_point(
-    data = slice_max(modes.ag18, y),
-    aes(x, y),
-    size = 1,
-    shape = 18,
-    color = sequential_hcl(8, palette = ag18.col)[1]
-  ) +
-  geom_point(
-    data = slice_max(modes.ag18, x),
-    aes(x, y),
-    size = 1,
-    shape = 18,
-    color = sequential_hcl(8, palette = ag18.col)[1]
-  ) +
-  geom_label_repel(
-    data = slice_max(modes.ag18, y),
-    aes(x, y, label = 'm1'),
-    size = 3,
-    color = 'black',
-    fill = 'grey90',
-    alpha = 0.8,
-    label.padding = unit(0.02, 'in'),
-    label.r = unit(0, 'in'),
-    min.segment.length = 0
-  ) +
-  geom_label_repel(
-    data = slice_max(modes.pd15, y),
-    aes(x, y, label = 'm1'),
-    size = 3,
-    color = 'black',
-    fill = 'grey90',
-    alpha = 0.8,
-    label.padding = unit(0.02, 'in'),
-    label.r = unit(0, 'in'),
-    min.segment.length = 0
-  ) +
-  geom_label_repel(
-    data = slice_max(modes.pd15, x),
-    aes(x, y, label = 'm2'),
-    size = 3,
-    color = 'black',
-    fill = 'grey90',
-    alpha = 0.8,
-    label.padding = unit(0.02, 'in'),
-    label.r = unit(0, 'in'),
-    min.segment.length = 0
   ) +
   labs(x = 'pressure (GPa)', y = 'PDF') +
   coord_cartesian(xlim = c(0, 4)) +
@@ -941,23 +767,8 @@ plots.dens <-
           filter(oceanic.plate.age %in% c(85.0, 110.0), upper.plate.thickness %in% c(46, 62))
       }
     d.pd15 <- density(pd15$P)
-    modes.pd15 <-
-      as_tibble(data.frame(d.pd15[c('x', 'y')])[c(F, diff(diff(d.pd15$y)>=0)<0),]) %>%
-      arrange(desc(y)) %>%
-      mutate(mode = 1:n(), .before = x)
-    modes.pd15 <- filter(modes.pd15, y > max(modes.pd15$y)/65) %>% slice(1:10)
     d.ag18 <- density(ag18$P)
-    modes.ag18 <-
-      as_tibble(data.frame(d.ag18[c('x', 'y')])[c(F, diff(diff(d.ag18$y)>=0)<0),]) %>%
-      arrange(desc(y)) %>%
-      mutate(mode = 1:n(), .before = x)
-    modes.ag18 <- filter(modes.ag18, y > max(modes.ag18$y)/65) %>% slice(1:10)
     d.marx <- density(m$P[m$recovered])
-    modes.marx <-
-      as_tibble(data.frame(d.marx[c('x', 'y')])[c(F, diff(diff(d.marx$y)>=0)<0),]) %>%
-      arrange(desc(y)) %>%
-      mutate(mode = 1:n(), .before = x)
-    modes.marx <- filter(modes.marx, y > max(modes.marx$y)/thresh) %>% slice(1:n)
     dens.summary <- compute_dens_2d(filter(m, recovered), n = 80)
     cdfP.summary <-
       m %>%
@@ -1151,94 +962,10 @@ plots.dens <-
         aes(x, y),
         color = sequential_hcl(8, palette = ag18.col)[1]
       ) +
-      geom_point(
-        data = modes.pd15,
-        aes(x, y),
-        size = 1,
-        shape = 18,
-        color = sequential_hcl(8, palette = pd15.col)[8]
-      ) +
-      geom_point(
-        data = modes.ag18,
-        aes(x, y),
-        size = 1,
-        shape = 18,
-        color = sequential_hcl(8, palette = ag18.col)[1]
-      ) +
-      geom_point(
-        data = slice_max(modes.pd15, y),
-        aes(x, y),
-        size = 1,
-        shape = 18,
-        color = sequential_hcl(8, palette = pd15.col)[8]
-      ) +
-      geom_point(
-        data = slice_max(modes.pd15, x),
-        aes(x, y),
-        size = 1,
-        shape = 18,
-        color = sequential_hcl(8, palette = pd15.col)[8]
-      ) +
-      geom_point(
-        data = slice_max(modes.ag18, y),
-        aes(x, y),
-        size = 1,
-        shape = 18,
-        color = sequential_hcl(8, palette = ag18.col)[1]
-      ) +
-      geom_point(
-        data = slice_max(modes.ag18, x),
-        aes(x, y),
-        size = 1,
-        shape = 18,
-        color = sequential_hcl(8, palette = ag18.col)[1]
-      ) +
       geom_path(
         data = data.frame(d.marx[c('x', 'y')]),
         aes(x, y),
         color = sequential_hcl(8, palette = marx.col)[8]
-      ) +
-      geom_point(
-        data = modes.marx,
-        aes(x, y),
-        size = 1,
-        shape = 18,
-        color = sequential_hcl(8, palette = marx.col)[8]
-      ) +
-      geom_point(
-        data = slice_max(modes.marx, y),
-        aes(x, y),
-        size = 1,
-        shape = 18,
-        color = sequential_hcl(8, palette = marx.col)[8]
-      ) +
-      geom_point(
-        data = slice_max(modes.marx, x),
-        aes(x, y),
-        size = 1,
-        shape = 18,
-        color = sequential_hcl(8, palette = marx.col)[8]
-      ) +
-      geom_label_repel(
-        data = slice_max(modes.marx, y),
-        aes(x, y, label = 'm1'),
-        size = 3,
-        color = 'black',
-        fill = 'grey90',
-        alpha = 0.8,
-        label.padding = unit(0.02, 'in'),
-        label.r = unit(0, 'in'),
-        min.segment.length = 0
-      ) +
-      geom_label_repel(
-        data = slice_max(modes.marx, x),
-        aes(x, y, label = 'm2'),
-        size = 3,
-        fill = 'grey90',
-        alpha = 0.8,
-        label.padding = unit(0.02, 'in'),
-        label.r = unit(0, 'in'),
-        min.segment.length = 0
       ) +
       labs(x = 'pressure (GPa)', y = 'PDF') +
       coord_cartesian(xlim = c(0, 4)) +

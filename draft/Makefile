@@ -1,7 +1,7 @@
 # Makefile for compiling RMarkdown documents
 # Document name (no file extension)
 PAPER = kerswell-et-al-marx
-SUPP = kerswell-et-al-marx-supplementary
+SUPP = kerswell-et-al-marx-supporting
 FIGSDIR = assets/figs
 # pdflatex command
 LTXFLAGS = "--shell-escape -interaction=nonstopmode -file-line-error -synctex=1 %O %S"

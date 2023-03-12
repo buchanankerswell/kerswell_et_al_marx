@@ -439,28 +439,6 @@ fun <- function(model, path_marx, path_grid) {
       shape = 18,
       color = sequential_hcl(8, palette = marx.col)[8]
     ) +
-    geom_label_repel(
-      data = slice_max(modes.marx, y),
-      aes(x, y, label = 'm1'),
-      size = 2.5,
-      color = 'black',
-      fill = 'grey90',
-      alpha = 0.8,
-      label.padding = unit(0.02, 'in'),
-      label.r = unit(0, 'in'),
-      min.segment.length = 0
-    ) +
-    geom_label_repel(
-      data = slice_max(modes.marx, x),
-      aes(x, y, label = 'm2'),
-      size = 2.5,
-      color = 'black',
-      fill = 'grey90',
-      alpha = 0.8,
-      label.padding = unit(0.02, 'in'),
-      label.r = unit(0, 'in'),
-      min.segment.length = 0
-    ) +
     labs(x = 'pressure (GPa)', y = 'PDF') +
     coord_cartesian(xlim = c(0, 4)) +
     scale_x_continuous(breaks = seq(0, 4, 1)) +
