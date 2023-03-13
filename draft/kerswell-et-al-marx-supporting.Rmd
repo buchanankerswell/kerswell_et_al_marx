@@ -95,11 +95,11 @@ The following pages contain visualizations of marker classifications results for
 walk(
   models,
   ~{
-#    cat('\n\n\\blandscape\n\n')
-#    cat('![Marker classification for model ', .x, '. Refer to the main text for explanation of panels and colors.](assets/figs/class_comp/', .x, '-class-comp.png "Marker classification for model ', .x, '")', '', sep = '')
-#    cat('\n\n\\elandscape\n\n')
     cat('\n\n\\blandscape\n\n')
-    cat('![PT distribution of recovered markers from model ', .x, '. Refer to the main text for explanation of panels and colors.](assets/figs/marx_comp/', .x, '-marx-comp.png "PT distribution of recovered markers from model ', .x, '")', '', sep = '')
+    cat('![Marker classification for model ', .x, '. Refer to the main text for explanation of panels and colors.](assets/figs/class_comp/', .x, '-class-comp.png "Marker classification for model ', .x, '")', '', sep = '')
+    cat('\n\n\\elandscape\n\n')
+    cat('\n\n\\blandscape\n\n')
+    cat('![PT distribution of recovered markers from model ', .x, '. Refer to the main text for explanation of panels and colors. Geodynamic time steps with dark red fills indicate that the accretionary wedge toe has already collided with the high-viscosity convergence region positioned at 500 km from the left boundary. Only timeteps before the accretionary wedge collision are used for marker classification.](assets/figs/marx_comp/', .x, '-marx-comp.png "PT distribution of recovered markers from model ', .x, '")', '', sep = '')
     cat('\n\n\\elandscape\n\n')
   }
 )
