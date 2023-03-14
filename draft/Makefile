@@ -2,6 +2,7 @@
 # Document name (no file extension)
 PAPER = kerswell-et-al-marx
 SUPP = kerswell-et-al-marx-supporting
+DIFF = g3_submission/kerswell-et-al-marx
 FIGSDIR = assets/figs
 # pdflatex command
 LTXFLAGS = "--shell-escape -interaction=nonstopmode -file-line-error -synctex=1 %O %S"
@@ -21,6 +22,8 @@ paper: $(PAPER).pdf
 supp: $(SUPP).pdf
 	@open $<
 
+diff: diff.tex
+	
 upload: $(PAPER).Rmd $(PAPER).pdf
 	@printf "\nUploading %s to google docs trackdown/%s\n" "$(PAPER)"
 	@Rscript assets/r/upload-google.R $(PAPER).Rmd $(PAPER).pdf $(FIGSDIR) upload
@@ -62,6 +65,9 @@ $(SUPP).tex: $(SUPP).Rmd
 	@printf "\nRmarkdown Render for %s ..." "$(SUPP)"
 	@R -q -e 'rmarkdown::render("$(SUPP).Rmd", quiet = T, clean = F)' > /dev/null 2>&1
 	@rm -f $(SUPP).pdf
+diff.tex: $(PAPER).tex $(DIFF).tex
+	@printf "\nlatexdiff for %s vs. %s ..." "$(DIFF).tex" "$(PAPER).tex"
+	@latexdiff --type=CFONT --disable-citation-markup --graphics-markup=none --allow-spaces $(DIFF).tex $(PAPER).tex > diff.tex
 
 # purge auxillary files
 purge:
@@ -70,4 +76,4 @@ purge:
 # clean directory (excluding .Rmd file)
 clean: purge
 
-.PHONY: all paper supp upload update download purge clean
+.PHONY: all paper supp diff upload update download purge clean
