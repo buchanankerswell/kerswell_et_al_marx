@@ -27,15 +27,6 @@ abstract: |
   Bodies of rock that are detached (recovered) from subducting oceanic plates, and exhumed to Earth's surface, become invaluable records of the mechanical and chemical processing of rock along subduction interfaces. Exposures of interface rocks with high-pressure (HP) mineral assemblages provide insights into the nature of rock recovery, yet various interpretations concerning thermal gradients, recovery rates, and recovery depths arise when directly comparing the rock record with numerical simulations of subduction. Constraining recovery rates and depths from the rock record presents a major challenge because small sample sizes of HP rocks makes statistical inference weak. As an alternative approach, this study implements numerical simulations of oceanic-continental convergence and applies a classification algorithm to identify rock recovery. Over one million markers are classified from 64 simulations representing a large range of subduction zones. We find recovery pressures (depths) correlate strongly with convergence velocity and moderately with oceanic plate age, while thermal gradients correlate strongly with oceanic plate age and upper-plate thickness. Recovery rates (the volumetric ratio of recovered:subducted material) strongly correlate with upper-plate thickness, yet show no correlation with convergence velocity or oceanic plate age. Likewise, PT distributions of recovered markers vary among numerical experiments and generally show poor overlap with the rock record. A significant gap in marker recovery is found near 2 GPa and 550 ˚C, coinciding with the highest density of exhumed HP rocks. Implications for such a gap in marker recovery include numerical modeling uncertainties, petrologic uncertainties, selective sampling of exhumed HP rocks, or natural geodynamic factors not accounted for in numerical experiments.
 plain_language_summary: |
   Converging tectonic plates leads to subduction of the denser plate beneath the other. Bodies of subducted rock that return to Earth's surface bring information about the deep subduction interface, yet the rates, depths, and mechanisms that detach rock from the subducting plate are not well-understood. As an alternative to studying natural rock samples, this study implements a machine learning algorithm to identify rock detachment in numerical simulations. Over one million simulated rocks are classified from 64 simulations representing a large range of possible subduction zones. Pressure-temperature (PT) conditions of simulated rocks are compared across models and with the natural rock record. Correlations are drawn among important model parameters, including plate velocities and plate thickness, that reveal strong and weak effects on detachment of simulated rocks from the subducting plate. Recovery rates (the volumetric ratio of recovered:subducted material) strongly correlate with upper-plate thickness, yet show no correlation with other parameters. Likewise, PT distributions of simulated rocks show variable compatibility with the natural rock record depending on the comparison. A significant gap in simulated rock recovery coincides with a large proportion of samples preserved in the natural rock record. Implications for such a gap in simulated rock recovery include numerical modeling uncertainties, petrologic uncertainties, selective sampling of natural rocks, or geodynamic factors not accounted for in numerical experiments.
-output:
-  bookdown::pdf_document2:
-    fig_caption: yes
-    toc_depth: 3
-    keep_tex: true
-    citation_package: default
-    latex_engine: pdflatex
-    template: assets/tex/template.tex
-    pandoc_args: [--csl=assets/bib/agu.csl]
 bibliography: assets/bib/main.bib
 link-citations: true
 header-includes:
@@ -60,6 +51,16 @@ header-includes:
 - \DeclareUnicodeCharacter{2265}{$\geq$}
 - \DeclareUnicodeCharacter{2264}{$\leq$}
 - \usepackage{hyperref}
+- \def\tightlist{}
+output:
+  bookdown::pdf_document2:
+    fig_caption: yes
+    toc_depth: 3
+    keep_tex: true
+    citation_package: default
+    latex_engine: pdflatex
+    template: assets/tex/template.tex
+    pandoc_args: [--csl=assets/bib/agu.csl]
 ---
 
 ```{r echo=FALSE, message=FALSE}
@@ -148,25 +149,19 @@ Differences in compiled PT datasets notwithstanding, key observations regarding 
 > **Pressure**
 > 
 > - Rock recovery is broadly and unequally distributed
-> 
 > - Rock recovery is more frequent near 1 GPa and 2 GPa (bimodal)
-> 
 > - 64-66% of recovered rocks equilibrated between 1-2.5 GPa
 > 
 > **Temperature**
 > 
 > - 50-56% of recovered rocks equilibrated above 525 ˚C
-> 
 > - 32-34% of recovered rocks equilibrated between 350-525 ˚C
-> 
 > - 5-19% of recovered rocks equilibrated above 2.5 GPa
 > 
 > **PT gradient**
 > 
 > - 52-62% of recovered rocks record gradients between 5-10 ˚C/km
-> 
 > - 18-31% of recovered rocks record gradients between 10-15 ˚C/km
-> 
 > - 6-30% of recovered rocks record gradients above 15 ˚C/km
 
 \noindent
@@ -285,20 +280,14 @@ Classifying unlabelled markers as either "recovered" or "not recovered" based so
 > **Marker classification algorithm**
 >
 > 0. Select markers within a 760 km $\times$ 8 km section of oceanic crust
-> 
 > 1. Trace markers for 115 timesteps
-> 
 > 2. Identify maximum marker PT conditions (at [maxP, T] or “maxP”)
-> 
 > 3. Apply Gaussian mixture modeling to maximum marker PT conditions
-> 
 > 4. Check for cluster centroids within the bounds:
 >    - ≥ 3 ˚C/km AND
 >    - ≤ 1300 ˚C AND
 >    - ≤ 120 km (3.4 GPa)
-> 
 > 5. Classify marker clusters found in step 4 as “recovered”
-> 
 > 6. Classify all other markers as “not recovered”
 
 \noindent
@@ -353,17 +342,11 @@ For most experiments, marker recovery is localized within discrete and narrow mu
 Whether comparing the rock record with recovered markers from individual numerical experiments, suites of experiments, or all numerical experiments, several key observations emerge:
 
 > 1. Recovered markers from most individual numerical experiments show discrete multimodal PT distributions with steep step-like CDFs (Figure \@ref(fig:bigComp) and Supporting Information)
-> 
 > 2. While relatively few markers are recovered from PT regions coinciding with high-frequencies of natural samples around 2 GPa and 550 ˚C, markers and natural samples recovered from near 1 GPa show moderate overlap within typical uncertainties for thermobarometry and phase equilibrium modeling (50–100 ˚C; compare Figures \@ref(fig:marxComp), \@ref(fig:tkSummaryYoung), and \@ref(fig:tkSummaryOld))
-> 
 > 3. Markers are frequently recovered from a major P mode near 1 GPa and very infrequently recovered  between 2–2.5 GPa with a higher rate of recovery from lower P's (`r round(cdfP.summary$prob[which.min(abs(cdfP.summary$P-1.5))]*100)`% from ≤ 1.5 GPa) compared to natural samples (36-59% from ≤ 1.5 GPa; compare Figures \@ref(fig:marxComp), \@ref(fig:tkSummaryYoung), and \@ref(fig:tkSummaryOld))
-> 
 > 4. Markers are frequently recovered from a major T mode near 275 ˚C and very infrequently recovered between 400–600 ˚C with a higher rate of recovery from lower T's (`r round(cdfT.summary$prob[which.min(abs(cdfT.summary$T-525))]*100)`% from ≤ 525 ˚C) compared to natural samples (44-50% from ≤ 525 ˚C; compare Figures \@ref(fig:marxComp), \@ref(fig:tkSummaryYoung), and \@ref(fig:tkSummaryOld))
-> 
 > 5. The relative abundance of markers recovered along "typical" thermal gradients for subduction zones (`r round(cdfGrad.summary$prob[which.min(abs(cdfGrad.summary$grad-10))]*100)-round(cdfGrad.summary$prob[which.min(abs(cdfGrad.summary$grad-5))]*100)`% from 5-12 ˚C/km) is high compared to natural samples (59-78% from 5-12 ˚C/km; compare Figures \@ref(fig:marxComp), \@ref(fig:tkSummaryYoung), and \@ref(fig:tkSummaryOld))
-> 
 > 6. Many markers are recovered from the forbidden zone (`r round(cdfGrad.summary$prob[which.min(abs(cdfGrad.summary$grad-5))]*100)`% from ≤ 5 ˚C/km; compare Figures \@ref(fig:marxComp), \@ref(fig:tkSummaryYoung), and \@ref(fig:tkSummaryOld))
-> 
 > 7. Virtually no markers (`r round((1-cdfGrad.summary$prob[which.min(abs(cdfGrad.summary$grad-15))])*100, 3)`%) are recovered from ≥ 15 ˚C/km compared to natural samples (6-30% from ≥ 15 ˚C/km; compare Figures \@ref(fig:marxComp), \@ref(fig:tkSummaryYoung), and \@ref(fig:tkSummaryOld))
 
 (ref:marxCompCap) Recovered markers from all 64 numerical experiments. (a) PT diagram showing the frequency of recovered markers (black points and green Tanaka contours) in comparison with the pd15 (solid red contours) and ag18 (filled gray contours) datasets. Marker frequency is concentrated along relatively cool thermal gradients, primarily near the continental Moho (1 GPa), with minor recovery modes centered near the onset of plate coupling (2.3-2.5 GPa). (insets) Probability distribution diagrams showing discrete multimodal recovery P's (top inset) and a steep CDF (bottom inset) indicating that a substantial proportion of markers are recovered from depths between 0.5-1.5 GPa. Note the higher-abundance of pd15 and ag18 samples at > 1.5 GPa compared to markers. Thin lines are thermal gradients labeled in ˚C/km. Reaction boundaries for eclogitization of oceanic crust and antigorite dehydration are from @ito1971 and @schmidt1998, respectively. Marker counts (Tanaka contours) are computed across a 100 $\times$ 100 grid (0.04 GPa $\times$ 10 ˚C).
@@ -439,11 +422,8 @@ The termination of the low-velocity zone at depths beyond the continental Moho m
 Although recovered markers partially overlap with the range of PT estimates compiled in the pd15 and ag18 datasets, the differences between distributions of recovered markers and natural samples are numerous, including: (1) an obvious lack of markers recovered from ≥ 15 ˚C/km  (`r round((1-cdfGrad.summary$prob[which.min(abs(cdfGrad.summary$grad-15))])*100, 3)`%) compared to pd15 and ag18 (37-48%, Figure \@ref(fig:marxComp)), (2) recovery of markers from a single dominant mode near 1 GPa and 275 ˚C compared to more broadly distributed multimodal recovery across PT space for natural samples (Figure \@ref(fig:marxComp)), (3) a general shift towards lower T's and cooler thermal gradients for markers compared to natural samples, and (4) a remarkable gap in marker recovery near 2 GPa and 550 ˚C that coincides with the highest frequency of natural samples (Figure \@ref(fig:marxComp)). In fact, across 64 numerical experiments with wide-ranging initial conditions less than 1% (`r round(nrow(filter(marx.class.summary.filtered.pt.path, recovered & P > 1.8 & P < 2.2 & T > 475 & T < 625))/nrow(filter(marx.class.summary.filtered.pt.path, recovered))*100, 2)`%) of markers are recovered from between 1.8-2.2 GPa and 475-625 ˚C. Why might this gap occur? Four possibilities are considered:
 
 > 1. Simple rheological models preclude certain recovery mechanisms (poor implementation of subduction interface mechanics, i.e. modeling uncertainty, Section \@ref(numericalUncertainties))
-> 
 > 2. Peak metamorphic conditions are systematically misinterpreted [peak metamorphic conditions do not correspond to maxP or PT paths are not well constrained\, i.e. petrologic uncertainties\, Section \@ref(petrologicUncertainties)\, e.g. see @penniston2015]
-> 
 > 3. Rocks are frequently (re)sampled from the same peak metamorphic conditions and other rocks from different metamorphic grades are infrequently sampled [selective nonrandom sampling\, i.e. scientific bias\, Section \@ref(scientificUncertainties)\, e.g. see @agard2018]
-> 
 > 4. Rocks are recovered during short-lived events [e.g. subduction of seamounts, @agard2009] or by preferential exhumation mechanisms that are not implemented in our numerical experiments, rather than recovered during steady-state subduction within a serpentine-rich tectonic mélange that is characteristic of our numerical experiments (i.e. geodynamic uncertainties, Section \@ref(geodynamicUncertainties))
 
 ### Numerical Modeling Uncertainties {#numericalUncertainties}
@@ -471,9 +451,7 @@ Alternatively, although fluid release is modeled in our numerical experiments as
 This study traces PT paths of more than one million markers from 64 subduction simulations representing a large range of presently active subduction zones worldwide. Marker recovery is identified by implementing a "soft" clustering algorithm, and PT distributions of recovered markers are compared among models and with the rock record. Such a large dataset presents a statistically-robust portrait of important recovery modes (where most markers are detached) along the subduction interface. The three most important findings are as follows:
 
 > 1. Numerical simulations with relatively simple (de)hydration models and visco-plastic interface rheologies simulate important recovery mechanisms near the base of the continental Moho around 1 GPa and 275 ˚C (underplating and/or formation of tectonic mélanges) and near the depth of mechanical plate coupling around 2.3–2.5 GPa and 525 ˚C. It is crucial to note, however, that while numerical experiments indicate an abundance of recovered markers near the Moho ($\sim$ 1 GPa) that is consistent with the rock record, pd15 and ag18 indicate a much larger proportion of material recovered from near the onset of plate coupling ($\sim$ 2.3–2.5 GPa) compared to numerical experiments (relative to the size of the datasets).
-> 
 > 2. Subduction systems with young oceanic plates, slow convergence velocities, and thin upper-plate lithospheres are most consistent with the rock record, but it is unclear to what extent kinematic effects (young flexible oceanic plates with high subduction angles accommodating deeper subduction of material) rather than thermal effects (young oceanic plates supporting higher thermal gradients) drive changes in marker PT distributions. Comparing PT distributions of recovered markers from young-slow-thin numerical experiments with the rock record is not straightforward, however, because numerical experiments also indicate that recovery rates do not correlate with oceanic plate age or convergence velocity, and fewer markers are recovered from subduction systems with thin upper-plates.
-> 
 > 3. While maximum marker recovery depths near 2.3–2.5 GPa in many numerical experiments is consistent with the onset of plate coupling and sudden decrease in sample frequency above 2.3–2.5 GPa in the rock record, very few markers are recovered from > 1 GPa. A gap in (or significant lack of) marker recovery near 2 GPa and 550 ˚C coinciding with the highest frequencies of natural samples suggests an "overabundance" of samples are studied from this PT region. Explanations for this "overabundance" might include selective sampling of rocks amenable to petrologic investigation (scientific bias), reaction overstepping (abrupt release of water triggering detachment of rock near 2 GPa and 550 ˚C), or processes such as subduction of seamounts or exhumation mechanisms that are not included in numerical simulations. Future work targeting natural samples from a larger range of peak PT conditions and analyzing marker recovery from numerical geodynamic models that include new implementations of metamorphic (de)hydration reactions and interface rheologies might help resolve this discrepancy.
 
 # Open Research {-}

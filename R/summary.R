@@ -857,7 +857,7 @@ if (!is.null(stats.summary)) {
       legend.justification = 'top',
       legend.box.just = 'top',
       legend.position = 'bottom',
-      axis.text.x = element_text(angle = -90, hjust = 0.5),
+      axis.text.x = element_text(angle = -60, hjust = 0.5),
       axis.ticks = element_blank()
     )
   pp.corr <-
