@@ -23,6 +23,8 @@ supp: $(SUPP).pdf
 	@open $<
 
 diff: diff.tex
+	@echo "\nDone!"
+	@echo "\nRun pdflatex on diff.tex ..."
 	
 upload: $(PAPER).Rmd $(PAPER).pdf
 	@printf "\nUploading %s to google docs trackdown/%s\n" "$(PAPER)"
