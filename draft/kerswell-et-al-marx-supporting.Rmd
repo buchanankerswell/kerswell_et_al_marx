@@ -4,27 +4,21 @@ classoption: draft
 title: 'Supporting Information for: Computing Rates and Distributions of Rock Recovery in Subduction Zones'
 authors:
 - name: Buchanan C. Kerswell
-  affil: 1
+  affil: 1,2
 - name: Matthew J. Kohn
-  affil: 2
+  affil: 1
 - name: Taras V. Gerya
   affil: 3
 affiliations:
 - number: 1
-  name: Department of Geology & Environmental Earth Science, Miami University, Oxford, OH 45056
+  name: Department of Geosciences, Boise State University, Boise, ID 83725
 - number: 2
-  name: Department of Geosicences, Boise State University, Boise, ID 83725
+  name: Department of Geology & Environmental Earth Science, Miami University, Oxford, OH 45056
 - number: 3
   name: Department of Earth Sciences, ETH-Zurich, Sonneggstrasse 5, Zurich 8092, Switzerland
-output:
-  bookdown::pdf_document2:
-    fig_caption: yes
-    toc_depth: 3
-    keep_tex: true
-    citation_package: default
-    latex_engine: pdflatex
-    template: assets/tex/template.tex
-    pandoc_args: [--csl=assets/bib/agu.csl]
+corresponding_author:
+- name: Buchanan C. Kerswell
+  email: buchanankerswell@u.boisestate.edu
 bibliography: assets/bib/main.bib
 link-citations: true
 header-includes:
@@ -48,9 +42,19 @@ header-includes:
 - \DeclareUnicodeCharacter{02DA}{$^\circ$}
 - \DeclareUnicodeCharacter{2265}{$\geq$}
 - \DeclareUnicodeCharacter{2264}{$\leq$}
+- \DeclareUnicodeCharacter{177}{$\pm$}
 - \makeatletter\def\fnum@figure{\figurename\thefigure}\makeatother
 - \def\figurename{Figure S}
 - \usepackage{hyperref}
+output:
+  bookdown::pdf_document2:
+    fig_caption: yes
+    toc_depth: 3
+    keep_tex: true
+    citation_package: default
+    latex_engine: pdflatex
+    template: assets/tex/template-supp.tex
+    pandoc_args: [--csl=assets/bib/agu.csl]
 ---
 
 ```{r echo=FALSE, message=FALSE}
@@ -96,10 +100,10 @@ walk(
   models,
   ~{
     cat('\n\n\\blandscape\n\n')
-    cat('![Marker classification for model ', .x, '. Refer to the main text for explanation of panels and colors.](assets/figs/class_comp/', .x, '-class-comp.png "Marker classification for model ', .x, '")', '', sep = '')
+    cat('![Marker classification for model ', .x, '. Refer to the main text for explanation of panels and colors.](assets/figs/class_comp/', .x, '-class-comp.jpg "Marker classification for model ', .x, '")', '', sep = '')
     cat('\n\n\\elandscape\n\n')
     cat('\n\n\\blandscape\n\n')
-    cat('![PT distribution of recovered markers from model ', .x, '. Refer to the main text for explanation of panels and colors. Geodynamic time steps with dark red fills indicate that the accretionary wedge toe has already collided with the high-viscosity convergence region positioned at 500 km from the left boundary. Only timeteps before the accretionary wedge collision are used for marker classification.](assets/figs/marx_comp/', .x, '-marx-comp.png "PT distribution of recovered markers from model ', .x, '")', '', sep = '')
+    cat('![PT distribution of recovered markers from model ', .x, '. Refer to the main text for explanation of panels and colors. Geodynamic time steps with dark red fills indicate that the accretionary wedge toe has already collided with the high-viscosity convergence region positioned at 500 km from the left boundary. Only timeteps before the accretionary wedge collision are used for marker classification.](assets/figs/marx_comp/', .x, '-marx-comp.jpg "PT distribution of recovered markers from model ', .x, '")', '', sep = '')
     cat('\n\n\\elandscape\n\n')
   }
 )

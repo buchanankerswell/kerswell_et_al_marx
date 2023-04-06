@@ -24,9 +24,9 @@ keypoints:
   - Simulated rock PT distributions and recovery rates change with subduction zone setting
   - Few simulated rocks detach from some PT regions with high frequencies of natural samples
 abstract: |
-  Bodies of rock that are detached (recovered) from subducting oceanic plates, and exhumed to Earth's surface, become invaluable records of the mechanical and chemical processing of rock along subduction interfaces. Exposures of interface rocks with high-pressure (HP) mineral assemblages provide insights into the nature of rock recovery, yet various interpretations concerning thermal gradients, recovery rates, and recovery depths arise when directly comparing the rock record with numerical simulations of subduction. Constraining recovery rates and depths from the rock record presents a major challenge because small sample sizes of HP rocks reduce statistical power. As an alternative approach, this study implements numerical simulations of oceanic-continental convergence and applies a classification algorithm to identify rock recovery. Over one million markers are classified from 64 simulations representing a large range of subduction zones. Recovery pressures (depths) correlate strongly with convergence velocity and moderately with oceanic plate age, while slab-top thermal gradients correlate strongly with oceanic plate age and upper-plate thickness. Recovery rates (the volumetric ratio of recovered:subducted material) strongly correlate with upper-plate thickness, yet show no correlation with convergence velocity or oceanic plate age. Likewise, pressure-temperature (PT) distributions of recovered markers vary among numerical experiments and generally show deviations from the rock record that cannot be explained by petrologic uncertaineties alone. For example, a significant gap in marker recovery is found near 2 GPa and 550 ˚C, coinciding with the highest frequencies of exhumed HP rocks. Explanations for such a gap in marker recovery include numerical modeling uncertainties, selective sampling of exhumed HP rocks (sampling bias), or natural geodynamic factors not accounted for in numerical experiments.
+  Bodies of rock that are detached (recovered) from subducting oceanic plates, and exhumed to Earth's surface, become invaluable records of the mechanical and chemical processing of rock along subduction interfaces. Exposures of interface rocks with high-pressure (HP) mineral assemblages provide insights into the nature of rock recovery, yet various inconsistencies arise when directly comparing the rock record with numerical simulations of subduction. Constraining recovery rates and depths from the rock record presents a major challenge because small sample sizes of HP rocks reduce statistical power. As an alternative approach, this study implements a classification algorithm to identify rock recovery in numerical simulations of oceanic-continental convergence. Over one million markers are classified from 64 simulations representing a large range of subduction zones. Recovery pressures (depths) correlate strongly with convergence velocity and moderately with oceanic plate age, while slab-top thermal gradients correlate strongly with oceanic plate age and upper-plate thickness. Recovery rates strongly correlate with upper-plate thickness, yet show no correlation with convergence velocity or oceanic plate age. Likewise, pressure-temperature (PT) distributions of recovered markers vary among numerical experiments and generally show deviations from the rock record that cannot be explained by petrologic uncertaineties alone. For example, a significant gap in marker recovery is found near 2 GPa and 550 ˚C, coinciding with the highest frequencies of exhumed HP rocks. Explanations for such a gap in marker recovery include numerical modeling uncertainties, selective sampling of exhumed HP rocks, or natural geodynamic factors not accounted for in numerical experiments.
 plain_language_summary: |
-  Bodies of deeply subducted rock that return to Earth's surface bring up information about the interface between converging tectonic plates within subduction zones, yet the mechanisms that detach rock from the subducting plate are not well-understood. As an alternative to studying natural rock samples, this study implements a machine learning algorithm to identify rock detachment in numerical simulations. Over one million simulated rocks are classified from 64 simulations representing a large range of possible subduction zones. Pressure-temperature (PT) conditions of simulated rocks are compared across models and with the natural rock record. Correlations are drawn among important model parameters, including plate velocities and plate thickness, that reveal strong and weak effects on detachment of simulated rocks from the subducting plate. Recovery rates (the volumetric ratio of recovered:subducted material) strongly correlate with upper-plate thickness, yet show no correlation with other parameters. Likewise, PT distributions of simulated rocks show variable compatibility with the natural rock record depending on the comparison. A significant gap in simulated rock recovery coincides with a large proportion of samples analyzed from the natural rock record. Explanations for such a gap in simulated rock recovery include numerical modeling uncertainties, selective sampling of natural rocks (sampling bias), or geodynamic factors not accounted for in numerical experiments.
+  Bodies of deeply subducted rock that return to Earth's surface bring up information about the interface between converging tectonic plates within subduction zones, yet the mechanisms that detach rock from the subducting plate are not well-understood. As an alternative to studying natural rock samples, this study implements a machine learning algorithm to identify rock detachment in numerical simulations. Over one million simulated rocks are classified from 64 simulations representing a large range of possible subduction zones. Pressure-temperature (PT) conditions of simulated rocks are compared across models and with the natural rock record. Correlations are drawn among important model parameters that reveal strong and weak effects on detachment of simulated rocks from the subducting plate. Recovery rates strongly correlate with upper-plate thickness, yet show no correlation with other parameters. Likewise, PT distributions of simulated rocks show variable compatibility with the natural rock record depending on the comparison. A significant gap in simulated rock recovery coincides with a large proportion of samples analyzed from the natural rock record. Explanations for such a gap in simulated rock recovery include numerical modeling uncertainties, selective sampling of natural rocks, or geodynamic factors not accounted for in numerical experiments.
 bibliography: assets/bib/main.bib
 link-citations: true
 header-includes:
@@ -137,7 +137,7 @@ Maximum pressure-temperature (PT) conditions have been estimated for hundreds of
 
 ```{r rockPTComp, fig.cap='(ref:rockPTCompCap)'}
 
-include_graphics('assets/figs/summary/rox-comp.png')
+include_graphics('assets/figs/summary/rox-comp.jpg')
 
 ```
 
@@ -308,7 +308,7 @@ Note that correlations are not presented here with respect to the thermal parame
 
 ```{r class, fig.cap='(ref:classCap)'}
 
-include_graphics('assets/figs/class_comp/cda62-class-comp.png')
+include_graphics('assets/figs/class_comp/cda62-class-comp.jpg')
 
 ```
 
@@ -320,7 +320,7 @@ include_graphics('assets/figs/class_comp/cda62-class-comp.png')
 
 ```{r bigComp, fig.cap='(ref:bigCompCap)'}
 
-include_graphics('assets/figs/marx_comp/cda62-marx-comp.png')
+include_graphics('assets/figs/marx_comp/cda62-marx-comp.jpg')
 
 ```
 
@@ -354,7 +354,7 @@ Whether comparing the rock record with recovered markers from individual numeric
 
 ```{r marxComp, fig.cap='(ref:marxCompCap)'}
 
-include_graphics('assets/figs/summary/marx-summary-comp.png')
+include_graphics('assets/figs/summary/marx-summary-comp.jpg')
 
 ```
 
@@ -362,7 +362,7 @@ include_graphics('assets/figs/summary/marx-summary-comp.png')
 
 ```{r tkSummaryYoung, fig.cap='(ref:tkSummaryYoungCap)'}
 
-include_graphics('assets/figs/summary/rox-marx-model-comp-young.png')
+include_graphics('assets/figs/summary/rox-marx-model-comp-young.jpg')
 
 ```
 
@@ -370,7 +370,7 @@ include_graphics('assets/figs/summary/rox-marx-model-comp-young.png')
 
 ```{r tkSummaryOld, fig.cap='(ref:tkSummaryOldCap)'}
 
-include_graphics('assets/figs/summary/rox-marx-model-comp-old.png')
+include_graphics('assets/figs/summary/rox-marx-model-comp-old.jpg')
 
 ```
 
@@ -392,7 +392,7 @@ A strong positive association between upper-plate thickness and mechanical coupl
 
 ```{r corrComp, fig.cap='(ref:corrCompCap)'}
 
-include_graphics('assets/figs/summary/thermo-kinematic-correlations-summary.png')
+include_graphics('assets/figs/summary/thermo-kinematic-correlations-summary.jpg')
 
 ```
 
