@@ -2,7 +2,7 @@
 
 # Kerswell et al. (2023; G3)
 
-This repository provides all materials for the manuscript *Computing Rates and Distributions of Rock Recovery in Subduction Zones* (Kerswell et al., 2023; G3). You can find the preprint [here](https://buchanankerswell.com/assets/pdf/kerswell-et-al-marx-g3-2023.pdf).
+This repository provides all materials for the manuscript *Computing Rates and Distributions of Rock Recovery in Subduction Zones* (Kerswell et al., 2023; G3). You can find the article [here](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2022GC010834).
 
 This repository includes:
 
