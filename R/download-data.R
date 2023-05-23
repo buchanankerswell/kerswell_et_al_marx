@@ -5,7 +5,7 @@ sink(file = paste0('data/log-', Sys.Date()), append = T, type = 'output', split 
 # Set download timeout to 10min
 cat(rep('~', 80), sep='')
 cat('\nSetting download timeout to 10 minutes ...')
-options(timeout = 600)
+options(timeout = 1200)
 # Download data from osf
 # https://osf.io/3emwf/files/osfstorage
 data.url <-
