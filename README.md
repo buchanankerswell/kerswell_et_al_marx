@@ -44,7 +44,7 @@ This will check for required R packages and try to install missing packages auto
 
 If all packages are found and available it will proceed to run the study with some initial prompts from the user. The study takes about 2.5-3hr to run on my MacBook Air (M1 8GB, 2020) with 8 cores computing in parallel and 20 jackknife samples. The study takes about 7 minutes to run without resampling.
 
-## Coauthors:
+## Coauthors
 
  - [Matthew Kohn](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwj8yqqTw8T5AhWSADQIHaYXAfQQFnoECA4QAQ&url=https%3A%2F%2Fwww.boisestate.edu%2Fearth%2Fstaff-members%2Fmatthew-j-kohn%2F&usg=AOvVaw3-lM9gvqmVRHG-WhSRFOdu) (Boise State University)
  - [Taras Gerya](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjI1eiYw8T5AhViLzQIHdZJDT4QFnoECBMQAQ&url=https%3A%2F%2Ferdw.ethz.ch%2Fen%2Fpeople%2Fprofile.taras-gerya.html&usg=AOvVaw1ZWpP5eVNtfgnNmrhmGcGJ) (ETH Zürich)
@@ -57,7 +57,7 @@ We gratefully acknowledge high-performance computing support from the Borah comp
 
 All data, code, and relevant information for reproducing this work can be found at [https://github.com/buchanankerswell/kerswell_et_al_marx](https://github.com/buchanankerswell/kerswell_et_al_marx), and at [https://doi.org/10.17605/OSF.IO/3EMWF](https://doi.org/10.17605/OSF.IO/3EMWF), the official Open Science Framework data repository ([Kerswell et al., 2023](https://doi.org/10.17605/OSF.IO/3EMWF)). All code is MIT Licensed and free for use and distribution (see license details).
 
-## Abstract:
+## Abstract
 
 Bodies of rock that are detached (recovered) from subducting oceanic plates, and exhumed to Earth's surface, become invaluable records of the mechanical and chemical processing of rock along subduction interfaces. Exposures of interface rocks with high-pressure (HP) mineral assemblages provide insights into the nature of rock recovery, yet various inconsistencies arise when directly comparing the rock record with numerical simulations of subduction. Constraining recovery rates and depths from the rock record presents a major challenge because small sample sizes of HP rocks reduce statistical power. As an alternative approach, this study implements a classification algorithm to identify rock recovery in numerical simulations of oceanic-continental convergence. Over one million markers are classified from 64 simulations representing a large range of subduction zones. Recovery pressures (depths) correlate strongly with convergence velocity and moderately with oceanic plate age, while slab-top thermal gradients correlate strongly with oceanic plate age and upper-plate thickness. Recovery rates strongly correlate with upper-plate thickness, yet show no correlation with convergence velocity or oceanic plate age. Likewise, pressure-temperature (PT) distributions of recovered markers vary among numerical experiments and generally show deviations from the rock record that cannot be explained by petrologic uncertainties alone. For example, a significant gap in marker recovery is found near 2 GPa and 550°C, coinciding with the highest frequencies of exhumed HP rocks. Explanations for such a gap in marker recovery include numerical modeling uncertainties, selective sampling of exhumed HP rocks, or natural geodynamic factors not accounted for in numerical experiments.
 
