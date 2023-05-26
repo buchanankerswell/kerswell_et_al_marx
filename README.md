@@ -8,9 +8,9 @@ This work investigates where, and how many, rocks get detached from subducting o
 
 The [manuscript](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2022GC010834) was published in *Geochemistry, Geophysics, Geosystems* on May 18, 2023. You can find the article [here](https://buchanankerswell.com/assets/pdf/kerswell-et-al-marx-g3-2023.pdf).
 
-This repository provides all materials for the manuscript *Computing Rates and Distributions of Rock Recovery in Subduction Zones* (Kerswell et al., 2023; G3). You can find the article [here](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2022GC010834).
-
 ## Repository
+
+This repository provides all materials for the manuscript *Computing Rates and Distributions of Rock Recovery in Subduction Zones* (Kerswell et al., 2023; G3).
 
 This repository includes:
 
