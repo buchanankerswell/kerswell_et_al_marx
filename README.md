@@ -6,7 +6,7 @@
 
 This work investigates where, and how many, rocks get detached from subducting oceanic plates beneath convergent margins. Over one-million numerical markers (representing rock fragments) from 64 numerical experiments were traced and classified as recovered, or not recovered, using a bespoke classification algorithm we wrote. Our results indicate that rocks are recovered from discrete depths, rather than continuously along the subduction interface.
 
-The [manuscript](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2022GC010834) was published in *Geochemistry, Geophysics, Geosystems* on May 18, 2023. You can find the article [here]({{ "assets/pdf/kerswell-et-al-marx-g3-2023.pdf" | relative_url }}).
+The [manuscript](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2022GC010834) was published in *Geochemistry, Geophysics, Geosystems* on May 18, 2023. You can find the article [here](https://buchanankerswell.com/assets/pdf/kerswell-et-al-marx-g3-2023.pdf).
 
 This repository provides all materials for the manuscript *Computing Rates and Distributions of Rock Recovery in Subduction Zones* (Kerswell et al., 2023; G3). You can find the article [here](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2022GC010834).
 
